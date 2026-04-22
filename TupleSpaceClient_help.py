@@ -49,6 +49,17 @@ def main():
             if cmd not in ["READ", "GET", "PUT"]:
                 print(f"Invalid command: {cmd}")
                 continue
+            if cmd in ["READ", "GET"]:#READ and GET only need key
+                if len(parts) < 2:
+                    print(f"Invalid format for {cmd}: {line}")
+                    continue
+                key = parts[1]
+                op_code = "R" if cmd == "READ" else "G"#protocol format
+                body = f"{op_code} {key}"
+                total_len = len(body)
+                if len(key) > 970:#length can't bigger than 970
+                    print(f"Key too long for {cmd}: {key}")
+                    continue
 
 
             # TASK 3: Send the message to the server, then receive the response.
