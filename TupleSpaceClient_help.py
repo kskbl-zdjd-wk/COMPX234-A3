@@ -60,6 +60,18 @@ def main():
                 if len(key) > 970:#length can't bigger than 970
                     print(f"Key too long for {cmd}: {key}")
                     continue
+            elif cmd == "PUT":#PUT needs key and value
+                if len(parts) < 3:
+                    print(f"Invalid format for PUT: {line}")
+                    continue
+                key = parts[1]
+                value = parts[2]
+                op_code = "P"#protocol format
+                body = f"{op_code} {key} {value}"
+                total_len = len(body)
+                if len(f"{key} {value}") > 970:
+                    print(f"Key+Value too long for PUT: {key} {value}")
+                    continue
 
 
             # TASK 3: Send the message to the server, then receive the response.
