@@ -75,7 +75,7 @@ def handle_client(client_socket):
             # TASK 1: Read the first 3 bytes to get the message size, then read
             # the remaining (size - 3) bytes and decode to a string.
             # Hint: use receive_n(). If nothing arrives, client disconnected — break.
-             msg_len_bytes = receive_n(client_socket, 3)
+            msg_len_bytes = receive_n(client_socket, 3)
             if not msg_len_bytes:  # client disconnects the link
                 break
             
@@ -84,7 +84,7 @@ def handle_client(client_socket):
             message_buffer = receive_n(client_socket, msg_len)
             if not message_buffer:
                 break
-            # 解码为字符串
+            # decode
             message = message_buffer.decode()
 
             # Handle the request
@@ -92,6 +92,10 @@ def handle_client(client_socket):
 
             # TASK 2: Build the response string with its size prepended (3 digits + space),
             # then send it. Hint: total size = len(response) + 4. Use sendall().
+            response_body = response 
+            total_response_len = len(response_body) + 3     
+            response_message = f"{total_response_len:03d}{response_body}"
+            client_socket.sendall(response_message.encode())
 
     except (socket.error, ValueError):
         pass
