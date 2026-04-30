@@ -126,6 +126,12 @@ def handle_request(message):
             # TASK 3: READ — look up key in tuple_space.
             # Return "OK (<key>, <value>) read" or "ERR <key> does not exist".
             increment_stat("read_count")
+            #check the key is exists or not
+            if key in tuple_space:
+                value = tuple_space[key]
+                return f"OK ({key}, {value}) read"
+            else:
+                return f"ERR {key} does not exist"
 
 
         elif op == "G":
