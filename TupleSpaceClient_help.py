@@ -89,9 +89,6 @@ def main():
             response_len = int(response_len_bytes.decode())
            
             response_buffer = sock.recv(response_len - 3)
-         
-            response = response_buffer.decode().strip()
-
 
             response = response_buffer.decode().strip()
             print(f"{line}: {response}")
