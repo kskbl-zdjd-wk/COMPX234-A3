@@ -81,6 +81,11 @@ def main():
             #            Then read the remaining (size - 3) bytes to get the response body.
             sock.sendall(message.encode())
 
+            response_len_bytes = sock.recv(3)
+            if not response_len_bytes:
+                print("Connection closed by server")
+                break
+
 
             response = response_buffer.decode().strip()
             print(f"{line}: {response}")
