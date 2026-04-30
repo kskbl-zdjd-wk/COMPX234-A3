@@ -69,6 +69,7 @@ def main():
                 op_code = "P"#protocol format
                 body = f"{op_code} {key} {value}"
                 total_len = len(body)
+                 # check length of key+value（key+" "+value <=970）
                 if len(f"{key} {value}") > 970:
                     print(f"Key+Value too long for PUT: {key} {value}")
                     continue
@@ -78,6 +79,7 @@ def main():
             # - Send:    sock.sendall(message.encode())
             # - Receive: first read 3 bytes to get the response size (like the server does).
             #            Then read the remaining (size - 3) bytes to get the response body.
+            sock.sendall(message.encode())
 
 
             response = response_buffer.decode().strip()
