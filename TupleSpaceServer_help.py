@@ -78,6 +78,7 @@ def handle_client(client_socket):
              msg_len_bytes = receive_n(client_socket, 3)
             if not msg_len_bytes:  # client disconnects the link
                 break
+            msg_len = int(msg_len_bytes.decode())
 
 
             # Handle the request
