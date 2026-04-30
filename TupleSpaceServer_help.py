@@ -81,14 +81,14 @@ def handle_client(client_socket):
             
             msg_len = int(msg_len_bytes.decode())
         
-            message_buffer = receive_n(client_socket, msg_len)
+            message_buffer = receive_n(client_socket, msg_len - 3)
             if not message_buffer:
                 break
             # decode
             message = message_buffer.decode()
 
             # Handle the request
-            response = handle_request(message_buffer)
+            response = handle_request(message)
 
             # TASK 2: Build the response string with its size prepended (3 digits + space),
             # then send it. Hint: total size = len(response) + 4. Use sendall().

@@ -2,6 +2,15 @@ import socket
 import sys
 import os
 
+def receive_n(sock, num_bytes):
+    data = b""
+    while len(data) < num_bytes:
+        chunk = sock.recv(num_bytes - len(data))
+        if not chunk:
+            break
+        data += chunk
+    return data
+
 def main():
     if len(sys.argv) != 4:
         print("Usage: python tuple_space_client.py <server-hostname> <server-port> <input-file>")
@@ -56,7 +65,7 @@ def main():
                 key = parts[1]
                 op_code = "R" if cmd == "READ" else "G"#protocol format
                 body = f"{op_code} {key}"
-                total_len = len(body)
+                total_len = len(body) + 3
                 if len(key) > 970:#length can't bigger than 970
                     print(f"Key too long for {cmd}: {key}")
                     continue
@@ -69,7 +78,7 @@ def main():
                 value = parts[2]
                 op_code = "P"#protocol format
                 body = f"{op_code} {key} {value}"
-                total_len = len(body)
+                total_len = len(body) + 3
                  # check length of key+value（key+" "+value <=970）
                 if len(f"{key} {value}") > 970:
                     print(f"Key+Value too long for PUT: {key} {value}")
@@ -83,14 +92,14 @@ def main():
             #            Then read the remaining (size - 3) bytes to get the response body.
             sock.sendall(message.encode())
 
-            response_len_bytes = sock.recv(3)
+            response_len_bytes = receive_n(sock, 3)
             if not response_len_bytes:
                 print("Connection closed by server")
                 break
 
             response_len = int(response_len_bytes.decode())
            
-            response_buffer = sock.recv(response_len - 3)
+            response_buffer = receive_n(sock, response_len - 3)
 
             response = response_buffer.decode().strip()
             print(f"{line}: {response}")
