@@ -21,7 +21,7 @@ def main():
     # TASK 1: Create a TCP/IP socket and connect it to the server.
     # Hint: socket.socket(socket.AF_INET, socket.SOCK_STREAM) creates the socket.
     # Then call sock.connect((hostname, port)) to connect.
-    socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         sock.connect((hostname, port))
     except socket.error as e:
@@ -64,6 +64,7 @@ def main():
                 if len(parts) < 3:
                     print(f"Invalid format for PUT: {line}")
                     continue
+
                 key = parts[1]
                 value = parts[2]
                 op_code = "P"#protocol format
@@ -73,6 +74,7 @@ def main():
                 if len(f"{key} {value}") > 970:
                     print(f"Key+Value too long for PUT: {key} {value}")
                     continue
+            message = f"{total_len:03d}{body}"    
 
 
             # TASK 3: Send the message to the server, then receive the response.
